@@ -1,0 +1,151 @@
+/* ── ImageSlideshow.css ─────────────────────────────────── */
+
+.slideshow-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  border-radius: var(--radius-lg);
+}
+
+/* ── Slide layer ────────────────────────────────────────── */
+.slide {
+  position: absolute;
+  inset: 0;
+}
+
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gradient overlay so caption is readable */
+.slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.72) 0%,
+    rgba(0,0,0,0.18) 45%,
+    rgba(0,0,0,0.05) 100%
+  );
+}
+
+/* Incoming slide */
+.slide--in {
+  z-index: 2;
+  animation: slideFadeIn 0.8s ease both;
+}
+
+/* Outgoing slide */
+.slide--out {
+  z-index: 1;
+  opacity: 0;
+}
+
+@keyframes slideFadeIn {
+  from { opacity: 0; transform: scale(1.03); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Ken-Burns subtle zoom while visible */
+.slide-img {
+  animation: kenBurns 7s ease-out both;
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1); }
+}
+
+/* ── Caption ────────────────────────────────────────────── */
+.slide-caption {
+  position: absolute;
+  bottom: 3.5rem;
+  left: 2rem;
+  right: 2rem;
+  z-index: 3;
+}
+
+.slide-caption__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+  background: linear-gradient(90deg, #fff 60%, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slide-caption__sub {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.04em;
+}
+
+/* ── Dots ───────────────────────────────────────────────── */
+.slideshow-dots {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.slideshow-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
+}
+
+.slideshow-dot:hover {
+  background: rgba(255,255,255,0.65);
+  transform: scale(1.25);
+}
+
+.slideshow-dot--active {
+  background: #d4af37;
+  width: 1.8rem;
+  border-radius: 999px;
+  box-shadow: 0 0 8px rgba(212,175,55,0.7);
+}
+
+/* ── Progress bar ───────────────────────────────────────── */
+.slideshow-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  z-index: 4;
+}
+
+.slideshow-progress__bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #d4af37, #f5d97a);
+  animation: progressFill linear both;
+  box-shadow: 0 0 6px rgba(212,175,55,0.8);
+}
+
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}

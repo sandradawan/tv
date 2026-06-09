@@ -1,0 +1,155 @@
+/* ============================================================
+   index.css  —  Global Design Tokens & Resets
+   Smart TV Lobby Dashboard
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap');
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Design Tokens ──────────────────────────────────────── */
+:root {
+  /* Palette */
+  --bg-base:        #0b0f1a;
+  --bg-surface:     #111827;
+  --bg-card:        #1a2235;
+  --bg-card-hover:  #1f2a42;
+  --border-subtle:  rgba(99, 132, 255, 0.12);
+  --border-glow:    rgba(99, 132, 255, 0.35);
+
+  --accent-blue:    #3b82f6;
+  --accent-indigo:  #6366f1;
+  --accent-cyan:    #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber:   #f59e0b;
+  --accent-rose:    #f43f5e;
+
+  --text-primary:   #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted:     #475569;
+
+  /* Gradients */
+  --grad-blue:    linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  --grad-indigo:  linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+  --grad-cyan:    linear-gradient(135deg, #0e7490 0%, #06b6d4 100%);
+  --grad-emerald: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+  --grad-header:  linear-gradient(180deg, #0f172a 0%, #0b0f1a 100%);
+
+  /* Spacing */
+  --gap-xs:  0.5rem;
+  --gap-sm:  1rem;
+  --gap-md:  1.5rem;
+  --gap-lg:  2rem;
+  --gap-xl:  3rem;
+
+  /* Radius */
+  --radius-sm:  0.5rem;
+  --radius-md:  1rem;
+  --radius-lg:  1.5rem;
+  --radius-xl:  2rem;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.04) inset;
+  --shadow-glow-blue:    0 0 40px rgba(59, 130, 246, 0.25);
+  --shadow-glow-indigo:  0 0 40px rgba(99, 102, 241, 0.25);
+  --shadow-glow-cyan:    0 0 40px rgba(6, 182, 212, 0.25);
+  --shadow-glow-emerald: 0 0 40px rgba(16, 185, 129, 0.25);
+
+  /* Fonts */
+  --font-body:  'Inter', system-ui, sans-serif;
+  --font-clock: 'Orbitron', monospace;
+
+  /* Transitions */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Base ───────────────────────────────────────────────── */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  overflow: hidden;
+  user-select: none;
+  cursor: none;  /* hide cursor on TV */
+}
+
+/* ── Keyframe Animations ────────────────────────────────── */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59,130,246,0.3); }
+  50%       { box-shadow: 0 0 50px rgba(59,130,246,0.7); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.5); opacity: 0.6; }
+}
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes border-spin {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes slide-in-bottom {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Utility Classes ────────────────────────────────────── */
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s var(--ease-smooth) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s var(--ease-smooth) both;
+}
+
+.animate-count-up {
+  animation: count-up 0.6s var(--ease-smooth) both;
+}
+
+/* Stagger delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }

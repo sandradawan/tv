@@ -1,0 +1,67 @@
+/* ── TickerBar.css ──────────────────────────────────────── */
+
+.ticker-wrapper {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  height: 3rem;
+  background: linear-gradient(90deg, #172554 0%, #1e3a8a 30%, #1d4ed8 70%, #172554 100%);
+  border-top: 1px solid rgba(99, 132, 255, 0.25);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* Label pill on the left */
+.ticker-label {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0 1.25rem;
+  height: 100%;
+  background: rgba(0,0,0,0.25);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #93c5fd;
+  white-space: nowrap;
+}
+
+.ticker-label__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #60a5fa;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Message display area */
+.ticker-track {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-msg {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #e0f2fe;
+  white-space: nowrap;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.ticker-msg--visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ticker-msg--hidden {
+  opacity: 0;
+  transform: translateX(-20px);
+}

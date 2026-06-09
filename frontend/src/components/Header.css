@@ -1,0 +1,114 @@
+/* ── Header.css ─────────────────────────────────────────── */
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-img {
+  width: 3.8rem;
+  height: 3.8rem;
+  border-radius: 50%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.55));
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.brand-name {
+  font-family: var(--font-clock);
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  background: linear-gradient(90deg, #d4af37, #f5d97a, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+}
+
+.brand-tagline {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ── Centre ─────────────────────────────────────────────── */
+.header-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.date-string {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.sync-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.sync-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.sync-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--accent-emerald);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── Clock ──────────────────────────────────────────────── */
+.header-clock {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.clock-hhmm {
+  font-family: var(--font-clock);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.clock-colon {
+  animation: pulse-dot 1s step-start infinite;
+  display: inline-block;
+  color: #d4af37;
+}
+
+.clock-ss {
+  font-family: var(--font-clock);
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}

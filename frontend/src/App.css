@@ -1,0 +1,111 @@
+/* ============================================================
+   App.css  —  Dashboard Layout
+   ============================================================ */
+
+/* ── Root Shell ─────────────────────────────────────────── */
+.dashboard-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+/* When video is active, blur the header and ticker, but keep stats panel fully visible */
+.dashboard-root--video-active .dashboard-header,
+.dashboard-root--video-active .ticker-wrapper {
+  filter: blur(8px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Smooth transition for blurring */
+.dashboard-header,
+.stats-section,
+.ticker-wrapper,
+.bg-grid {
+  transition: filter 1s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Background decorative grid ────────────────────────── */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.dashboard-header {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(11,15,26,0.9) 100%);
+  border-bottom: 1px solid var(--border-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── Main Body (video + stats) ──────────────────────────── */
+.dashboard-body {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem 0.75rem;
+  min-height: 0;
+}
+
+/* ── Slideshow Section ──────────────────────────────────── */
+.slideshow-section {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #000;
+  box-shadow: var(--shadow-card), 0 0 40px rgba(212,175,55,0.12);
+  border: 1px solid rgba(212,175,55,0.15);
+}
+
+/* ── Stats Section ──────────────────────────────────────── */
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+/* ── Ticker ─────────────────────────────────────────────── */
+.ticker-wrapper {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  height: 3rem;
+  background: linear-gradient(90deg, #1e3a8a 0%, #1e40af 50%, #1e3a8a 100%);
+  border-top: 1px solid rgba(99,132,255,0.2);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Responsive scaling for 4K displays ─────────────────── */
+@media (min-width: 3840px) {
+  html { font-size: 24px; }
+  .dashboard-body { grid-template-columns: 1fr 640px; }
+}
+@media (min-width: 1920px) and (max-width: 3839px) {
+  html { font-size: 18px; }
+  .dashboard-body { grid-template-columns: 1fr 500px; }
+}

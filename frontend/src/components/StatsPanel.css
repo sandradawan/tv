@@ -1,0 +1,246 @@
+/* ── StatsPanel.css ─────────────────────────────────────────────────────────── */
+
+.stats-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  height: 100%;
+}
+
+/* Heading */
+.stats-panel__heading {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.1rem;
+}
+
+.stats-heading-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ── Widget Cards ────────────────────────────────────────────────────────────── */
+.widget-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.widget-card:hover {
+  border-color: rgba(99, 132, 255, 0.15);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.widget-donut {
+  flex: 1.1;
+}
+
+.widget-line {
+  flex: 0.9;
+}
+
+/* ── Widget Headers ──────────────────────────────────────────────────────────── */
+.widget-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.widget-header__title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.widget-header__sub {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Donut Content & Design ──────────────────────────────────────────────────── */
+.donut-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.donut-svg-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+}
+
+.donut-segment {
+  transform: rotate(-90deg);
+  transform-origin: 50px 50px;
+  cursor: pointer;
+}
+
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.donut-center__val {
+  font-family: var(--font-clock);
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.donut-center__lbl {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.1rem;
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.legend-item:hover,
+.legend-item--active {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.legend-marker {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.legend-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.legend-value {
+  font-family: var(--font-clock);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ── Line Chart Design ───────────────────────────────────────────────────────── */
+.line-chart-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.chart-axis-lbl {
+  fill: var(--text-muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.chart-node-lbl {
+  fill: var(--text-secondary);
+  font-size: 8px;
+  font-family: var(--font-clock);
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.chart-node:hover .chart-node-lbl {
+  opacity: 1;
+}
+
+.chart-node circle {
+  cursor: pointer;
+  transition: r 0.2s ease, fill 0.2s ease;
+}
+
+.chart-node circle:hover {
+  r: 5px;
+  fill: #fff;
+}
+
+/* ── Skeletons ───────────────────────────────────────────────────────────────── */
+.skel-widget {
+  min-height: 180px;
+  position: relative;
+  background: linear-gradient(
+    110deg,
+    rgba(255,255,255,0.03) 30%,
+    rgba(255,255,255,0.07) 50%,
+    rgba(255,255,255,0.03) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  pointer-events: none;
+  border: 1px dashed rgba(255,255,255,0.05);
+}
+
+/* ── Error state ── */
+.stats-error {
+  background: rgba(244, 63, 94, 0.05);
+  border: 1px solid rgba(244, 63, 94, 0.15);
+  border-radius: 1rem;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--accent-rose);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stats-error__title { font-size: 0.95rem; font-weight: 700; }
+.stats-error__msg { font-size: 0.75rem; color: var(--text-secondary); }
