@@ -1,25 +1,22 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import './MediaShowcase.css'
 
 const VIDEOS = [
-  { src: '/assets/video.mp4', label: 'Local Video Preview' },
-  { src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', label: 'Imperialvilla — Highlights' },
-  { src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', label: 'Our Premium Properties' },
-  { src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', label: 'Excellence in Every Build' },
+  { src: '/assets/video.mp4', label: 'Imperialvilla Showcase' },
+  { src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', label: 'Premium Properties' },
+  { src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', label: 'Luxury Living' },
 ]
 
 const IMAGES = [
   { src: '/assets/flyer4.png', caption: 'Welcome to Imperialvilla', sub: 'Excellence in Every Build' },
   { src: '/assets/flyer1.png', caption: 'Find Your Dream Home', sub: 'Premium Properties Across Nigeria' },
-  { src: '/assets/flyer2.png', caption: 'Invest in Real Estate Today', sub: 'Secure Your Future With Smart Property Investments' },
+  { src: '/assets/flyer2.png', caption: 'Invest in Real Estate Today', sub: 'Secure Your Future With Smart Investments' },
   { src: '/assets/flyer3.png', caption: 'Our Services', sub: 'Sales · Management · Acquisition · Leasing' },
 ]
 
-// Fetch configurable session durations from environment (with fallbacks)
-const IMAGE_SESSION_DUR = Number(import.meta.env.VITE_IMAGE_SESSION_DUR) || 600000;      // 10 minutes
-const SINGLE_IMAGE_DUR  = Number(import.meta.env.VITE_SINGLE_IMAGE_DUR)  || 8000;       // 8 seconds
+const IMAGE_SESSION_DUR = Number(import.meta.env.VITE_IMAGE_SESSION_DUR) || 600000
+const SINGLE_IMAGE_DUR  = Number(import.meta.env.VITE_SINGLE_IMAGE_DUR)  || 8000
 
-// Helper to shuffle array
 function shuffle(array) {
   const copy = [...array]
   for (let i = copy.length - 1; i > 0; i--) {
@@ -29,58 +26,98 @@ function shuffle(array) {
   return copy
 }
 
-export default function MediaShowcase({ onModeChange }) {
-  const [mode, setMode] = useState('video') // 'video' or 'image'
+// Animated equalizer bars for the NOW PLAYING badge
+function EqualizerBars() {
+  return (
+    <span className="eq-bars" aria-hidden="true">
+      {[1,2,3,4,5].map(i => (
+        <span key={i} className={`eq-bar eq-bar--${i}`} />
+      ))}
+    </span>
+  )
+}
 
-  // Playlists (Shuffled on initialization)
+// Floating particles overlay
+function Particles({ count = 18 }) {
+  return (
+    <div className="particles-overlay" aria-hidden="true">
+      {Array.from({ length: count }).map((_, i) => (
+        <span
+          key={i}
+          className="particle"
+          style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 8}s`,
+            animationDuration: `${6 + Math.random() * 8}s`,
+            width: `${2 + Math.random() * 4}px`,
+            height: `${2 + Math.random() * 4}px`,
+            opacity: 0.3 + Math.random() * 0.5,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+export default function MediaShowcase({ onModeChange }) {
+  const [mode, setMode] = useState('video')
   const [shuffledVideos, setShuffledVideos] = useState(() => shuffle(VIDEOS))
   const [shuffledImages, setShuffledImages] = useState(() => shuffle(IMAGES))
-
   const [videoIndex, setVideoIndex] = useState(0)
   const [imageIndex, setImageIndex] = useState(0)
   const [imageTransition, setImageTransition] = useState('enter')
+  const [particles] = useState(() => 
+    Array.from({ length: 18 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 8,
+      duration: 6 + Math.random() * 8,
+      size: 2 + Math.random() * 4,
+      opacity: 0.3 + Math.random() * 0.45,
+    }))
+  )
 
   const videoRef = useRef(null)
   const bgAudioRef = useRef(null)
   const sessionTimerRef = useRef(null)
   const flyerTimerRef = useRef(null)
+  const fadeTimerRef = useRef(null)
 
-  // Smooth audio fading utility
-  const fadeAudio = (audioEl, targetVolume, duration = 800) => {
+  // ── Audio fade utility ───────────────────────────────────────────
+  const fadeAudio = useCallback((audioEl, targetVolume, duration = 800) => {
     if (!audioEl) return
+    clearInterval(fadeTimerRef.current)
     const startVolume = audioEl.volume
-    const steps = 16
+    const steps = 20
     const stepTime = duration / steps
     const volumeStep = (targetVolume - startVolume) / steps
     let currentStep = 0
 
-    const timer = setInterval(() => {
+    fadeTimerRef.current = setInterval(() => {
       currentStep++
       if (audioEl) {
         audioEl.volume = Math.max(0, Math.min(1, startVolume + volumeStep * currentStep))
       }
       if (currentStep >= steps) {
-        clearInterval(timer)
+        clearInterval(fadeTimerRef.current)
         if (audioEl) audioEl.volume = targetVolume
       }
     }, stepTime)
-  }
+  }, [])
 
-  // Transition from video to image mode
-  const transitionToImageMode = () => {
+  // ── Mode transitions ─────────────────────────────────────────────
+  const transitionToImageMode = useCallback(() => {
     setImageTransition('enter')
     setMode('image')
-  }
+  }, [])
 
-  // Handle Video ending (natural completion)
-  const handleVideoEnded = () => {
+  const handleVideoEnded = useCallback(() => {
     transitionToImageMode()
-  }
+  }, [transitionToImageMode])
 
-  // Handle Video load/play error (fallback to next video in queue if file is missing)
-  const handleVideoError = (e) => {
-    console.warn("Video failed to load, skipping to next:", currentVideo?.src)
-    setVideoIndex((prev) => {
+  const handleVideoError = useCallback(() => {
+    console.warn('Video failed, skipping to next')
+    setVideoIndex(prev => {
       const next = prev + 1
       if (next >= shuffledVideos.length) {
         setShuffledVideos(shuffle(VIDEOS))
@@ -88,38 +125,34 @@ export default function MediaShowcase({ onModeChange }) {
       }
       return next
     })
-  }
+  }, [shuffledVideos.length])
 
-  // Skip video helper for testing
-  const handleSkipVideo = () => {
-    transitionToImageMode()
-  }
-
-  // Session coordination and intervals
+  // ── Mode effect: audio ducking + timers ──────────────────────────
   useEffect(() => {
-    // Notify parent App component of current mode to handle background blur
     onModeChange?.(mode)
-
     const bgAudio = bgAudioRef.current
 
     if (mode === 'video') {
-      // Duck background music volume during video session
-      if (bgAudio) fadeAudio(bgAudio, 0.08)
-
-      // In video mode, we do NOT run a session timer.
-      // The video plays completely from start to finish.
-    } else {
-      // Restore full background music volume during flyer loop
+      // ✅ FIX: Completely mute then pause background audio during video
+      // This prevents hearing both video audio + background music simultaneously
       if (bgAudio) {
-        fadeAudio(bgAudio, 0.4)
+        fadeAudio(bgAudio, 0, 500)
+        setTimeout(() => {
+          if (bgAudio && !bgAudio.paused) bgAudio.pause()
+        }, 600)
+      }
+    } else {
+      // Resume background music during flyer mode
+      if (bgAudio) {
+        bgAudio.volume = 0
         bgAudio.play().catch(() => {})
+        fadeAudio(bgAudio, 0.45, 1500)
       }
 
-      // ── Image Session Timer ──
+      // Image session timer — after 10 min go back to next video
       sessionTimerRef.current = setTimeout(() => {
         setMode('video')
-        // Advance to the next video in the queue
-        setVideoIndex((prev) => {
+        setVideoIndex(prev => {
           const next = prev + 1
           if (next >= shuffledVideos.length) {
             setShuffledVideos(shuffle(VIDEOS))
@@ -129,9 +162,9 @@ export default function MediaShowcase({ onModeChange }) {
         })
       }, IMAGE_SESSION_DUR)
 
-      // ── Flyer Rotation Timer ──
+      // Flyer rotation timer
       flyerTimerRef.current = setInterval(() => {
-        setImageIndex((prev) => {
+        setImageIndex(prev => {
           const next = prev + 1
           if (next >= shuffledImages.length) {
             setShuffledImages(shuffle(IMAGES))
@@ -146,43 +179,31 @@ export default function MediaShowcase({ onModeChange }) {
       clearTimeout(sessionTimerRef.current)
       clearInterval(flyerTimerRef.current)
     }
-  }, [mode, shuffledVideos.length, shuffledImages.length, onModeChange])
+  }, [mode, shuffledVideos.length, shuffledImages.length, onModeChange, fadeAudio])
 
-  // Autoplay handler with audio-blocked fallback and user interaction listener
+  // ── Video autoplay ───────────────────────────────────────────────
   useEffect(() => {
     if (mode !== 'video' || !videoRef.current) return
-
-    videoRef.current.load()
-    
-    // Attempt unmuted play first
-    videoRef.current.muted = false
-    const playPromise = videoRef.current.play()
-
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        // Autoplay with audio was blocked: fallback to muted autoplay so it plays on launch
-        if (videoRef.current) {
-          videoRef.current.muted = true
-          videoRef.current.play().catch(() => {})
-        }
-      })
-    }
+    const vid = videoRef.current
+    vid.load()
+    vid.muted = false
+    vid.play().catch(() => {
+      vid.muted = true
+      vid.play().catch(() => {})
+    })
   }, [videoIndex, mode])
 
-  // Global listener to unmute video and play background audio on click/keypress
+  // ── Global interaction → unmute video + start bg audio ───────────
   useEffect(() => {
     const handleInteraction = () => {
-      if (videoRef.current) {
-        videoRef.current.muted = false
-      }
-      if (bgAudioRef.current) {
-        bgAudioRef.current.play().catch(() => {})
+      if (videoRef.current) videoRef.current.muted = false
+      const bg = bgAudioRef.current
+      if (bg && mode === 'image' && bg.paused) {
+        bg.play().catch(() => {})
       }
     }
-
-    window.addEventListener('click', handleInteraction)
-    window.addEventListener('keydown', handleInteraction)
-
+    window.addEventListener('click', handleInteraction, { once: true })
+    window.addEventListener('keydown', handleInteraction, { once: true })
     return () => {
       window.removeEventListener('click', handleInteraction)
       window.removeEventListener('keydown', handleInteraction)
@@ -194,7 +215,7 @@ export default function MediaShowcase({ onModeChange }) {
 
   return (
     <div className="showcase-root">
-      {/* Continuous smooth background music */}
+      {/* Background ambient music — only plays during flyer mode */}
       <audio
         ref={bgAudioRef}
         src="https://assets.mixkit.co/music/preview/mixkit-forest-lullaby-1109.mp3"
@@ -202,48 +223,66 @@ export default function MediaShowcase({ onModeChange }) {
         preload="auto"
       />
 
-      {/* Placeholder backdrop visible behind the floating video modal */}
-      {mode === 'video' && (
-        <div className="showcase-bg-placeholder">
-          <img src="/assets/logo.png" alt="Imperialvilla" className="showcase-bg-logo" />
-        </div>
-      )}
+      {/* ── Ambient background orbs (always visible) ── */}
+      <div className="showcase-orbs" aria-hidden="true">
+        <span className="orb orb--1" />
+        <span className="orb orb--2" />
+        <span className="orb orb--3" />
+      </div>
 
-      {/* ── Video Player Mode (Floating Modal) ── */}
-      {mode === 'video' && currentVideo && (
-        <div className="showcase-video-wrapper">
-          <div 
-            className="showcase-video-container" 
-            onClick={handleSkipVideo} 
-            style={{ cursor: 'pointer' }} 
-            title="Click to skip video session"
-          >
-            <video
-              ref={videoRef}
-              key={currentVideo.src}
-              className="showcase-video"
-              src={currentVideo.src}
-              autoPlay
-              playsInline
-              onEnded={handleVideoEnded}
-              onError={handleVideoError}
-            />
-            {/* Overlay */}
-            <div className="showcase-overlay" />
-            {/* Floating Card Label */}
-            <div className="showcase-label">
-              <span className="showcase-label__dot" />
-              Playing: {currentVideo.label} (Click to Skip)
+      {/* ── VIDEO MODE ── */}
+      {mode === 'video' && (
+        <>
+          {/* Dark backdrop with logo */}
+          <div className="showcase-bg-placeholder">
+            <img src="/assets/logo.png" alt="Imperialvilla" className="showcase-bg-logo" />
+            <div className="showcase-bg-rings" aria-hidden="true">
+              <span className="bg-ring bg-ring--1" />
+              <span className="bg-ring bg-ring--2" />
+              <span className="bg-ring bg-ring--3" />
             </div>
           </div>
-        </div>
+
+          {/* Floating video modal */}
+          {currentVideo && (
+            <div className="showcase-video-wrapper">
+              <div
+                className="showcase-video-container"
+                onClick={transitionToImageMode}
+                title="Click to skip video"
+                style={{ cursor: 'pointer' }}
+              >
+                <video
+                  ref={videoRef}
+                  key={currentVideo.src}
+                  className="showcase-video"
+                  src={currentVideo.src}
+                  autoPlay
+                  playsInline
+                  onEnded={handleVideoEnded}
+                  onError={handleVideoError}
+                />
+                <div className="showcase-overlay" />
+
+                {/* NOW PLAYING badge with animated equalizer */}
+                <div className="showcase-label">
+                  <EqualizerBars />
+                  <span>NOW PLAYING — {currentVideo.label}</span>
+                </div>
+
+                {/* Animated corner glow */}
+                <div className="video-corner-glow" aria-hidden="true" />
+              </div>
+            </div>
+          )}
+        </>
       )}
 
-      {/* ── Flyer Popup Mode (Book Open transition) ── */}
+      {/* ── IMAGE / FLYER MODE ── */}
       {mode === 'image' && currentImage && (
-        <div 
+        <div
           className={`showcase-image-container showcase-image--${imageTransition}`}
-          key={imageIndex} // Changing key triggers the 3D entry animation for each slide
+          key={imageIndex}
         >
           <img
             src={currentImage.src}
@@ -251,18 +290,36 @@ export default function MediaShowcase({ onModeChange }) {
             className="showcase-img"
           />
           <div className="showcase-overlay" />
-          
+
+          {/* Floating particles */}
+          <div className="particles-overlay" aria-hidden="true">
+            {particles.map(p => (
+              <span
+                key={p.id}
+                className="particle"
+                style={{
+                  left: `${p.left}%`,
+                  animationDelay: `${p.delay}s`,
+                  animationDuration: `${p.duration}s`,
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  opacity: p.opacity,
+                }}
+              />
+            ))}
+          </div>
+
           {/* Caption */}
           <div className="showcase-caption">
             <p className="showcase-caption__title">{currentImage.caption}</p>
             <p className="showcase-caption__sub">{currentImage.sub}</p>
           </div>
 
-          {/* Progress Bar */}
+          {/* Progress bar */}
           <div className="showcase-progress">
-            <div 
-              className="showcase-progress__bar" 
-              style={{ animationDuration: `${SINGLE_IMAGE_DUR}ms` }} 
+            <div
+              className="showcase-progress__bar"
+              style={{ animationDuration: `${SINGLE_IMAGE_DUR}ms` }}
             />
           </div>
         </div>

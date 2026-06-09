@@ -1,34 +1,22 @@
-import { useState, useEffect, useRef } from 'react'
 import './TickerBar.css'
 
-// ── Ticker messages — customise as needed ────────────────────────────────────
 const TICKER_MESSAGES = [
-  '🌟  Welcome to IPVL! We appreciate your patience and look forward to serving you.',
-  '📋  Please have your identification and documents ready for a faster process.',
-  '☕  Complimentary refreshments are available in the waiting area.',
-  '📞  Need assistance? Speak to any of our friendly staff members.',
-  '🔒  Your data and privacy are fully protected under our strict security policy.',
+  '🌟  Welcome to Imperialvilla Property Development Limited — Your Trusted Real Estate Partner',
+  '🏠  Premium Properties Available Now — Contact Our Sales Team For Exclusive Offers',
+  '📋  Please have your identification and documents ready for a faster check-in process',
+  '☕  Complimentary refreshments are available in the waiting area',
+  '📞  Need assistance? Speak to any of our friendly staff members on duty',
+  '🔒  Your data and privacy are fully protected under our strict security policy',
   '⏰  Operating Hours: Monday – Friday  |  8:00 AM – 5:00 PM',
-  '🌐  Visit our website at www.ipvl.com for online services and support.',
-  '💡  Tip: You can pre-register online to reduce your waiting time!',
+  '🌐  Visit our website for online services — www.imperialvillapropertydevelopment.com',
+  '💡  Tip: Pre-register online to reduce your waiting time and get faster service',
+  '🏆  Award-Winning Real Estate Services Since 2015 — Building Dreams, Creating Legacies',
 ]
 
+// Join all messages into one long scrolling string
+const FULL_TEXT = TICKER_MESSAGES.join('     ◆     ')
+
 export default function TickerBar() {
-  const [msgIndex, setMsgIndex] = useState(0)
-  const [visible, setVisible]   = useState(true)
-
-  // Cycle messages every 12 seconds with a fade transition
-  useEffect(() => {
-    const id = setInterval(() => {
-      setVisible(false)
-      setTimeout(() => {
-        setMsgIndex(prev => (prev + 1) % TICKER_MESSAGES.length)
-        setVisible(true)
-      }, 500)
-    }, 12_000)
-    return () => clearInterval(id)
-  }, [])
-
   return (
     <div className="ticker-wrapper" role="marquee" aria-live="polite" aria-atomic="true">
       {/* Label pill */}
@@ -37,11 +25,13 @@ export default function TickerBar() {
         <span>NOTICE</span>
       </div>
 
-      {/* Message area */}
+      {/* Continuous scrolling track */}
       <div className="ticker-track">
-        <p className={`ticker-msg ${visible ? 'ticker-msg--visible' : 'ticker-msg--hidden'}`}>
-          {TICKER_MESSAGES[msgIndex]}
-        </p>
+        <div className="ticker-scroll">
+          <span className="ticker-content">{FULL_TEXT}</span>
+          {/* Duplicate for seamless loop */}
+          <span className="ticker-content" aria-hidden="true">{FULL_TEXT}</span>
+        </div>
       </div>
     </div>
   )

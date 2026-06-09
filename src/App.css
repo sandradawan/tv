@@ -1,5 +1,5 @@
 /* ============================================================
-   App.css  —  Dashboard Layout  (Dark Theme)
+   App.css  —  Dashboard Layout + Ambient Background Motion
    ============================================================ */
 
 /* ── Root Shell ─────────────────────────────────────────── */
@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-/* When video is active, blur the header and ticker, keep stats panel visible */
+/* When video is active, blur the header and ticker */
 .dashboard-root--video-active .dashboard-header,
 .dashboard-root--video-active .ticker-wrapper {
   filter: blur(8px);
@@ -30,16 +30,62 @@
               transform 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Background decorative grid ────────────────────────── */
+/* ── Background grid ────────────────────────────────────── */
 .bg-grid {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
   z-index: 0;
+}
+
+/* ── Ambient floating orbs (background atmosphere) ──────── */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.12;
+  animation: bgOrbDrift ease-in-out infinite alternate;
+}
+
+.bg-orb--1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #1d4ed8, transparent 70%);
+  top: -200px; left: -150px;
+  animation-duration: 22s;
+}
+
+.bg-orb--2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #d4af37, transparent 70%);
+  bottom: -100px; right: -100px;
+  animation-duration: 18s;
+  animation-delay: -9s;
+}
+
+.bg-orb--3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #6366f1, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation-duration: 26s;
+  animation-delay: -13s;
+}
+
+@keyframes bgOrbDrift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(40px, 30px); }
 }
 
 /* ── Header ─────────────────────────────────────────────── */
@@ -51,13 +97,30 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2.5rem;
-  background: linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(11,15,26,0.9) 100%);
+  background: linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(11,15,26,0.92) 100%);
   border-bottom: 1px solid var(--border-subtle);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.3);
 }
 
-/* ── Main Body (video + stats) ──────────────────────────── */
+/* Animated shimmer line at bottom of header */
+.dashboard-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), rgba(59,130,246,0.5), transparent);
+  background-size: 200% 100%;
+  animation: headerShimmer 4s linear infinite;
+}
+
+@keyframes headerShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Main Body ──────────────────────────────────────────── */
 .dashboard-body {
   position: relative;
   z-index: 5;
@@ -77,6 +140,13 @@
   background: #000;
   box-shadow: var(--shadow-card), 0 0 40px rgba(212,175,55,0.12);
   border: 1px solid rgba(212,175,55,0.15);
+  /* Animated border glow */
+  animation: borderPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes borderPulse {
+  0%   { box-shadow: var(--shadow-card), 0 0 20px rgba(212,175,55,0.08); }
+  100% { box-shadow: var(--shadow-card), 0 0 50px rgba(212,175,55,0.22), 0 0 80px rgba(59,130,246,0.08); }
 }
 
 /* ── Stats Section ──────────────────────────────────────── */
@@ -93,14 +163,14 @@
   z-index: 10;
   flex-shrink: 0;
   height: 3rem;
-  background: linear-gradient(90deg, #1e3a8a 0%, #1e40af 50%, #1e3a8a 100%);
+  background: linear-gradient(90deg, #172554 0%, #1e3a8a 30%, #1d4ed8 70%, #172554 100%);
   border-top: 1px solid rgba(99,132,255,0.2);
   overflow: hidden;
   display: flex;
   align-items: center;
 }
 
-/* ── Responsive scaling for 4K displays ─────────────────── */
+/* ── Responsive scaling ─────────────────────────────────── */
 @media (min-width: 3840px) {
   html { font-size: 24px; }
   .dashboard-body { grid-template-columns: 1fr 640px; }

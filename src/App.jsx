@@ -47,6 +47,12 @@ export default function App() {
 
   return (
     <div className={`dashboard-root ${mediaMode === 'video' ? 'dashboard-root--video-active' : ''}`}>
+      {/* Ambient background orbs */}
+      <div className="bg-orbs" aria-hidden="true">
+        <span className="bg-orb bg-orb--1" />
+        <span className="bg-orb bg-orb--2" />
+        <span className="bg-orb bg-orb--3" />
+      </div>
       <div className="bg-grid" aria-hidden="true" />
 
       {/* Header */}

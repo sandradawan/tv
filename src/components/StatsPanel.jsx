@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import './StatsPanel.css'
 
-// ── Historical data simulation for Line Chart ────────────────────────────────
+// ── Historical data simulation for Line Chart ───────────
 function generateHistoricalData(currentVal) {
   if (!currentVal) return []
-  // Simulate 6 months of client growth ending at current value
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
   const start = Math.round(currentVal * 0.82)
   const step  = (currentVal - start) / 5
@@ -12,6 +11,29 @@ function generateHistoricalData(currentVal) {
     label: m,
     value: Math.round(start + step * idx + (Math.random() - 0.5) * currentVal * 0.02)
   }))
+}
+
+// ── Animated count-up hook ───────────────────────────────
+function useCountUp(target, duration = 1200) {
+  const [display, setDisplay] = useState(0)
+  const frameRef = useRef(null)
+
+  useEffect(() => {
+    if (!target) { setDisplay(0); return }
+    const start = performance.now()
+    const animate = (now) => {
+      const elapsed = now - start
+      const progress = Math.min(elapsed / duration, 1)
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplay(Math.round(eased * target))
+      if (progress < 1) frameRef.current = requestAnimationFrame(animate)
+    }
+    frameRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(frameRef.current)
+  }, [target, duration])
+
+  return display
 }
 
 // ── Upgraded StatsPanel ───────────────────────────────────────────────────────
@@ -51,12 +73,18 @@ export default function StatsPanel({ stats, loading, error }) {
   const totalStaff   = stats?.total_staff ?? 0
   const totalPending = stats?.pending_approvals ?? 0
 
+  // Animated count-up values
+  const animClients = useCountUp(totalClients, 1400)
+  const animAgents  = useCountUp(totalAgents,  1600)
+  const animStaff   = useCountUp(totalStaff,   1200)
+  const animPending = useCountUp(totalPending, 1000)
+
   // 1. Donut segment calculation (visual scaling so small numbers are visible)
   const segments = [
-    { label: 'Clients',   val: totalClients, color: '#3b82f6', weight: 45 },
-    { label: 'Staff',     val: totalStaff,   color: '#6366f1', weight: 25 },
-    { label: 'Agents',    val: totalAgents,  color: '#10b981', weight: 18 },
-    { label: 'Pending',   val: totalPending, color: '#f59e0b', weight: 12 },
+    { label: 'Clients',   val: animClients, color: '#3b82f6', weight: 45 },
+    { label: 'Staff',     val: animStaff,   color: '#6366f1', weight: 25 },
+    { label: 'Agents',    val: animAgents,  color: '#10b981', weight: 18 },
+    { label: 'Pending',   val: animPending, color: '#f59e0b', weight: 12 },
   ]
 
   const totalWeight = segments.reduce((sum, s) => sum + s.weight, 0)

@@ -1,4 +1,4 @@
-/* ── TickerBar.css  (Dark Theme) ────────────────────────── */
+/* ── TickerBar.css — Continuous Scrolling Ticker ──────── */
 
 .ticker-wrapper {
   position: relative;
@@ -13,7 +13,7 @@
   gap: 0;
 }
 
-/* Label pill on the left */
+/* Label pill */
 .ticker-label {
   flex-shrink: 0;
   display: flex;
@@ -21,14 +21,15 @@
   gap: 0.45rem;
   padding: 0 1.25rem;
   height: 100%;
-  background: rgba(0,0,0,0.25);
-  border-right: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  border-right: 1px solid rgba(255,255,255,0.12);
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #93c5fd;
   white-space: nowrap;
+  z-index: 2;
 }
 
 .ticker-label__dot {
@@ -39,29 +40,55 @@
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-/* Message display area */
+/* Fade masks on sides for smooth edges */
 .ticker-track {
   flex: 1;
   overflow: hidden;
-  padding: 0 2rem;
+  position: relative;
   display: flex;
   align-items: center;
+  height: 100%;
 }
 
-.ticker-msg {
-  font-size: 0.95rem;
+.ticker-track::before,
+.ticker-track::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ticker-track::before {
+  left: 0;
+  background: linear-gradient(90deg, #1e3a8a, transparent);
+}
+
+.ticker-track::after {
+  right: 0;
+  background: linear-gradient(-90deg, #1d4ed8, transparent);
+}
+
+/* The scrolling container */
+.ticker-scroll {
+  display: flex;
+  white-space: nowrap;
+  animation: tickerMove 90s linear infinite;
+  will-change: transform;
+}
+
+.ticker-content {
+  font-size: 0.92rem;
   font-weight: 500;
   color: #e0f2fe;
-  white-space: nowrap;
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  padding-right: 4rem;
+  letter-spacing: 0.01em;
+  flex-shrink: 0;
 }
 
-.ticker-msg--visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.ticker-msg--hidden {
-  opacity: 0;
-  transform: translateX(-20px);
+@keyframes tickerMove {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
