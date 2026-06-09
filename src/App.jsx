@@ -6,7 +6,7 @@ import TickerBar from './components/TickerBar.jsx'
 import './App.css'
 
 // ── Config ───────────────────────────────────────────────────────────────────
-const API_URL            = import.meta.env.VITE_API_URL || '/api-stats.php'
+const API_URL            = import.meta.env.VITE_API_URL || 'https://system.imperialvillapropertydevelopment.com/api/api-stats.php'
 const POLL_INTERVAL      = Number(import.meta.env.VITE_POLL_INTERVAL)  || 60_000
 
 export default function App() {

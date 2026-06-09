@@ -1,17 +1,16 @@
-/* ── TickerBar.css  (Light Theme) ──────────────────────── */
+/* ── TickerBar.css  (Dark Theme) ────────────────────────── */
 
 .ticker-wrapper {
   position: relative;
   z-index: 10;
   flex-shrink: 0;
-  height: 2.9rem;
-  background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 35%, #1d4ed8 65%, #1e3a8a 100%);
-  border-top: 1px solid rgba(37, 99, 235, 0.4);
+  height: 3rem;
+  background: linear-gradient(90deg, #172554 0%, #1e3a8a 30%, #1d4ed8 70%, #172554 100%);
+  border-top: 1px solid rgba(99, 132, 255, 0.25);
   overflow: hidden;
   display: flex;
   align-items: center;
   gap: 0;
-  box-shadow: 0 -2px 14px rgba(37, 99, 235, 0.15);
 }
 
 /* Label pill on the left */
@@ -22,13 +21,13 @@
   gap: 0.45rem;
   padding: 0 1.25rem;
   height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0,0,0,0.25);
+  border-right: 1px solid rgba(255,255,255,0.1);
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #bfdbfe;
+  color: #93c5fd;
   white-space: nowrap;
 }
 
@@ -36,7 +35,7 @@
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 50%;
-  background: #93c5fd;
+  background: #60a5fa;
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
@@ -50,12 +49,11 @@
 }
 
 .ticker-msg {
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: #eff6ff;
+  color: #e0f2fe;
   white-space: nowrap;
   transition: opacity 0.5s ease, transform 0.5s ease;
-  letter-spacing: 0.01em;
 }
 
 .ticker-msg--visible {
