@@ -16,6 +16,5 @@
 *.sw?
 .DS_Store
 
-# Large media assets (ignore local video file to avoid GitHub size limits)
-**/public/assets/video.mp4
-
+# Large media assets — video.mp4 included (50MB, under GitHub 100MB limit)
+# If video grows beyond 100MB in future, use Git LFS instead.
