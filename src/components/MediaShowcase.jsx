@@ -189,34 +189,53 @@ export default function MediaShowcase({ onModeChange }) {
     }
   }, [mode, shuffledVideos.length, shuffledImages.length, onModeChange, fadeAudio])
 
+  const [isMuted, setIsMuted] = useState(true)
+
   // ── Video autoplay ───────────────────────────────────────────────
   useEffect(() => {
     if (mode !== 'video' || !videoRef.current) return
     const vid = videoRef.current
     vid.load()
-    vid.muted = false
+    vid.muted = isMuted
     vid.play().catch(() => {
+      // If unmuted autoplay fails, fallback to muted autoplay
       vid.muted = true
       vid.play().catch(() => {})
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoIndex, mode])
 
-  // ── Global interaction → unmute video + start bg audio ───────────
+  // ── Global interaction → unmute on first click/keypress ───────────
   useEffect(() => {
-    const handleInteraction = () => {
-      if (videoRef.current) videoRef.current.muted = false
-      const bg = bgAudioRef.current
-      if (bg && mode === 'image' && bg.paused) {
-        bg.play().catch(() => {})
+    const handleFirstInteraction = () => {
+      setIsMuted(false)
+    }
+    window.addEventListener('click', handleFirstInteraction, { once: true })
+    window.addEventListener('keydown', handleFirstInteraction, { once: true })
+    return () => {
+      window.removeEventListener('click', handleFirstInteraction)
+      window.removeEventListener('keydown', handleFirstInteraction)
+    }
+  }, [])
+
+  // ── Sync Master Mute State ───────────────────────────────────────
+  useEffect(() => {
+    const vid = videoRef.current
+    const bg = bgAudioRef.current
+
+    if (isMuted) {
+      if (vid) vid.muted = true
+      if (bg) bg.muted = true
+    } else {
+      if (vid) vid.muted = false
+      if (bg) {
+        bg.muted = false
+        if (mode === 'image' && bg.paused) {
+          bg.play().catch(() => {})
+        }
       }
     }
-    window.addEventListener('click', handleInteraction, { once: true })
-    window.addEventListener('keydown', handleInteraction, { once: true })
-    return () => {
-      window.removeEventListener('click', handleInteraction)
-      window.removeEventListener('keydown', handleInteraction)
-    }
-  }, [mode])
+  }, [isMuted, mode])
 
   const currentVideo = shuffledVideos[videoIndex]
   const currentImage = shuffledImages[imageIndex]
@@ -230,6 +249,36 @@ export default function MediaShowcase({ onModeChange }) {
         loop
         preload="auto"
       />
+
+      {/* Sound Toggle Button */}
+      <button
+        className={`sound-toggle ${isMuted ? 'sound-toggle--muted' : ''}`}
+        onClick={(e) => {
+          e.stopPropagation()
+          setIsMuted(!isMuted)
+        }}
+        title={isMuted ? 'Unmute' : 'Mute'}
+        aria-label={isMuted ? 'Unmute dashboard sound' : 'Mute dashboard sound'}
+      >
+        {isMuted ? (
+          <>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sound-icon">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+            <span className="sound-toggle-text">Enable Sound</span>
+          </>
+        ) : (
+          <>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sound-icon">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+            <span className="sound-toggle-text">Mute</span>
+          </>
+        )}
+      </button>
 
       {/* ── Ambient background orbs (always visible) ── */}
       <div className="showcase-orbs" aria-hidden="true">
