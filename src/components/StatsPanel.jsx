@@ -36,10 +36,22 @@ function useCountUp(target, duration = 1200) {
   return display
 }
 
-// ── Upgraded StatsPanel ───────────────────────────────────────────────────────
+// ── Upgraded StatsPanel ──────────────────────────────────
 export default function StatsPanel({ stats, loading, error }) {
   const [activeSegment, setActiveSegment] = useState(null)
 
+  // ✅ ALL hooks must be called unconditionally before any early return
+  const totalClients = stats?.total_clients ?? 0
+  const totalAgents  = stats?.total_agents  ?? 0
+  const totalStaff   = stats?.total_staff   ?? 0
+  const totalPending = stats?.pending_approvals ?? 0
+
+  const animClients = useCountUp(totalClients, 1400)
+  const animAgents  = useCountUp(totalAgents,  1600)
+  const animStaff   = useCountUp(totalStaff,   1200)
+  const animPending = useCountUp(totalPending, 1000)
+
+  // Loading skeleton
   if (loading) {
     return (
       <div className="stats-panel stats-panel--skeleton">
@@ -50,6 +62,7 @@ export default function StatsPanel({ stats, loading, error }) {
     )
   }
 
+  // Error state
   if (error) {
     return (
       <div className="stats-panel">
@@ -67,33 +80,21 @@ export default function StatsPanel({ stats, loading, error }) {
     )
   }
 
-  // Define data segments
-  const totalClients = stats?.total_clients ?? 0
-  const totalAgents  = stats?.total_agents ?? 0
-  const totalStaff   = stats?.total_staff ?? 0
-  const totalPending = stats?.pending_approvals ?? 0
-
-  // Animated count-up values
-  const animClients = useCountUp(totalClients, 1400)
-  const animAgents  = useCountUp(totalAgents,  1600)
-  const animStaff   = useCountUp(totalStaff,   1200)
-  const animPending = useCountUp(totalPending, 1000)
-
-  // 1. Donut segment calculation (visual scaling so small numbers are visible)
+  // Donut segments
   const segments = [
-    { label: 'Clients',   val: animClients, color: '#3b82f6', weight: 45 },
-    { label: 'Staff',     val: animStaff,   color: '#6366f1', weight: 25 },
-    { label: 'Agents',    val: animAgents,  color: '#10b981', weight: 18 },
-    { label: 'Pending',   val: animPending, color: '#f59e0b', weight: 12 },
+    { label: 'Clients', val: animClients, color: '#3b82f6', weight: 45 },
+    { label: 'Staff',   val: animStaff,   color: '#6366f1', weight: 25 },
+    { label: 'Agents',  val: animAgents,  color: '#10b981', weight: 18 },
+    { label: 'Pending', val: animPending, color: '#f59e0b', weight: 12 },
   ]
 
   const totalWeight = segments.reduce((sum, s) => sum + s.weight, 0)
   const donutRadius = 38
-  const circ = 2 * Math.PI * donutRadius // ~238.76
-  
+  const circ = 2 * Math.PI * donutRadius
+
   let currentOffset = 0
 
-  // 2. Line chart calculation (Monthly Client Growth)
+  // Line chart calculation (Monthly Client Growth)
   const lineData = generateHistoricalData(totalClients)
   const chartW = 320
   const chartH = 90
