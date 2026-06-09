@@ -115,8 +115,16 @@ export default function MediaShowcase({ onModeChange }) {
     transitionToImageMode()
   }, [transitionToImageMode])
 
-  const handleVideoError = useCallback(() => {
-    console.warn('Video failed, skipping to next')
+  const handleVideoError = useCallback((e) => {
+    const mediaError = e.target?.error
+    // Code 1 is MEDIA_ERR_ABORTED. This happens normally when changing src, loading new streams, or unmounting.
+    if (mediaError && mediaError.code === 1) {
+      return
+    }
+    console.warn(
+      'Video failed, skipping to next.',
+      mediaError ? `Code: ${mediaError.code}, Message: ${mediaError.message}` : ''
+    )
     setVideoIndex(prev => {
       const next = prev + 1
       if (next >= shuffledVideos.length) {
