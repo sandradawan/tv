@@ -1,10 +1,10 @@
 # Dependencies
-**/node_modules/
-**/dist/
+node_modules/
+dist/
 
 # Local env files
-**/.env.local
-**/.env.*.local
+.env.local
+.env.*.local
 
 # Editor files
 .idea/
@@ -16,5 +16,5 @@
 *.sw?
 .DS_Store
 
-# Large media assets — video.mp4 included (50MB, under GitHub 100MB limit)
+# Large media assets — video.mp4 included (45MB, under GitHub 100MB limit)
 # If video grows beyond 100MB in future, use Git LFS instead.
