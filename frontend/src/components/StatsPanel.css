@@ -1,4 +1,4 @@
-/* ── StatsPanel.css ─────────────────────────────────────────────────────────── */
+/* ── StatsPanel.css  (Light Theme) ──────────────────────── */
 
 .stats-panel {
   display: flex;
@@ -28,22 +28,23 @@
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-/* ── Widget Cards ────────────────────────────────────────────────────────────── */
+/* ── Widget Cards ──────────────────────────────────────── */
 .widget-card {
   background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
   border-radius: 1rem;
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.95rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
 }
 
 .widget-card:hover {
-  border-color: rgba(99, 132, 255, 0.15);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-1px);
 }
 
 .widget-donut {
@@ -54,7 +55,7 @@
   flex: 0.9;
 }
 
-/* ── Widget Headers ──────────────────────────────────────────────────────────── */
+/* ── Widget Headers ──────────────────────────────────────── */
 .widget-header {
   display: flex;
   flex-direction: column;
@@ -70,13 +71,13 @@
 
 .widget-header__sub {
   font-size: 0.68rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-/* ── Donut Content & Design ──────────────────────────────────────────────────── */
+/* ── Donut ──────────────────────────────────────────────── */
 .donut-content {
   display: flex;
   align-items: center;
@@ -118,7 +119,7 @@
 .donut-center__lbl {
   font-size: 0.6rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-top: 0.1rem;
@@ -143,7 +144,7 @@
 
 .legend-item:hover,
 .legend-item--active {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(37, 99, 235, 0.05);
 }
 
 .legend-marker {
@@ -173,7 +174,7 @@
   color: var(--text-primary);
 }
 
-/* ── Line Chart Design ───────────────────────────────────────────────────────── */
+/* ── Line Chart ──────────────────────────────────────────── */
 .line-chart-wrapper {
   flex: 1;
   display: flex;
@@ -209,29 +210,29 @@
 
 .chart-node circle:hover {
   r: 5px;
-  fill: #fff;
+  fill: var(--text-primary);
 }
 
-/* ── Skeletons ───────────────────────────────────────────────────────────────── */
+/* ── Skeletons ───────────────────────────────────────────── */
 .skel-widget {
   min-height: 180px;
   position: relative;
   background: linear-gradient(
     110deg,
-    rgba(255,255,255,0.03) 30%,
-    rgba(255,255,255,0.07) 50%,
-    rgba(255,255,255,0.03) 70%
+    rgba(37, 99, 235, 0.03) 30%,
+    rgba(37, 99, 235, 0.09) 50%,
+    rgba(37, 99, 235, 0.03) 70%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s linear infinite;
   pointer-events: none;
-  border: 1px dashed rgba(255,255,255,0.05);
+  border: 1px dashed rgba(37, 99, 235, 0.12);
 }
 
-/* ── Error state ── */
+/* ── Error state ─────────────────────────────────────────── */
 .stats-error {
-  background: rgba(244, 63, 94, 0.05);
-  border: 1px solid rgba(244, 63, 94, 0.15);
+  background: rgba(225, 29, 72, 0.04);
+  border: 1px solid rgba(225, 29, 72, 0.18);
   border-radius: 1rem;
   padding: 2.5rem 1.5rem;
   text-align: center;
@@ -243,4 +244,4 @@
 }
 
 .stats-error__title { font-size: 0.95rem; font-weight: 700; }
-.stats-error__msg { font-size: 0.75rem; color: var(--text-secondary); }
+.stats-error__msg { font-size: 0.75rem; color: var(--text-muted); }
