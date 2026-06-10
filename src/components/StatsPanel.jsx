@@ -48,7 +48,7 @@ function KPICard({ label, value, icon, color, delay }) {
           LIVE
         </span>
       </div>
-      <div className="kpi-value">{value.toLocaleString()}</div>
+      <div className="kpi-value">{value.toLocaleString()}+</div>
       <div className="kpi-label">{label}</div>
       <div className="kpi-bar">
         <div className="kpi-bar__fill" />
@@ -95,7 +95,7 @@ export default function StatsPanel({ stats, loading, error }) {
   // All hooks unconditionally before early returns
   const totalClients = stats?.total_clients     ?? 0
   const totalAgents  = stats?.total_agents      ?? 0
-  const totalStaff   = stats?.total_staff       ?? 0
+  const totalStaff   = stats?.total_staff ? stats.total_staff + 29 : 0
   const totalPending = stats?.pending_approvals ?? 0
 
   const animClients = useCountUp(totalClients, 1400)
