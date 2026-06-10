@@ -36,9 +36,9 @@ function useCountUp(target, duration = 1200) {
 }
 
 // ── KPI Metric Card ──────────────────────────────────────
-function KPICard({ label, value, icon, color, delay }) {
+function KPICard({ label, value, icon, color, delay, className = '' }) {
   return (
-    <div className={`kpi-card animate-fade-in-up delay-${delay}`} style={{ '--kpi-color': color }}>
+    <div className={`kpi-card ${className} animate-fade-in-up delay-${delay}`} style={{ '--kpi-color': color }}>
       <div className="kpi-top">
         <div className="kpi-icon-wrap">
           {icon}
@@ -67,48 +67,37 @@ const Icons = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
     </svg>
   ),
-  agents: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-      <polyline points="16 11 18 13 22 9"/>
-    </svg>
-  ),
   staff: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
       <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
     </svg>
   ),
-  pending: (
+  branches: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <polyline points="12 6 12 12 16 14"/>
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+      <circle cx="12" cy="10" r="3" />
     </svg>
   ),
 }
 
 // ── Upgraded StatsPanel ──────────────────────────────────
 export default function StatsPanel({ stats, loading, error }) {
-  const [activeSegment, setActiveSegment] = useState(null)
-
   // All hooks unconditionally before early returns
   const totalClients = stats?.total_clients     ?? 0
-  const totalAgents  = stats?.total_agents      ?? 0
   const totalStaff   = stats?.total_staff ? stats.total_staff + 29 : 0
-  const totalPending = stats?.pending_approvals ?? 0
 
   const animClients = useCountUp(totalClients, 1400)
-  const animAgents  = useCountUp(totalAgents,  1600)
   const animStaff   = useCountUp(totalStaff,   1200)
-  const animPending = useCountUp(totalPending, 1000)
 
   // Loading skeleton
   if (loading) {
     return (
       <div className="stats-panel stats-panel--skeleton">
-        <div className="kpi-grid">
-          {[1,2,3,4].map(i => <div key={i} className="kpi-card kpi-card--skel" />)}
+        <div className="kpi-grid kpi-grid--3">
+          <div className="kpi-card kpi-card--skel" />
+          <div className="kpi-card kpi-card--skel" />
+          <div className="kpi-card kpi-card--skel kpi-card--span" />
         </div>
         <div className="widget-card skel-widget" />
         <div className="widget-card skel-widget" />
@@ -132,19 +121,6 @@ export default function StatsPanel({ stats, loading, error }) {
       </div>
     )
   }
-
-  // ── Donut chart data ─────────────────────────────────────
-  const segments = [
-    { label: 'Clients', val: animClients, color: '#2563eb', weight: 45 },
-    { label: 'Staff',   val: animStaff,   color: '#4f46e5', weight: 25 },
-    { label: 'Agents',  val: animAgents,  color: '#059669', weight: 18 },
-    { label: 'Pending', val: animPending, color: '#d97706', weight: 12 },
-  ]
-
-  const totalWeight = segments.reduce((sum, s) => sum + s.weight, 0)
-  const donutRadius = 38
-  const circ        = 2 * Math.PI * donutRadius
-  let   currentOffset = 0
 
   // ── Line chart data ──────────────────────────────────────
   const lineData = generateHistoricalData(totalClients)
@@ -180,76 +156,36 @@ export default function StatsPanel({ stats, loading, error }) {
         <div className="panel-header__line" />
       </div>
 
-      {/* ── KPI 2×2 Grid ── */}
-      <div className="kpi-grid">
-        <KPICard label="Total Clients"   value={animClients} icon={Icons.clients} color="#2563eb" delay="0" />
-        <KPICard label="Active Agents"   value={animAgents}  icon={Icons.agents}  color="#059669" delay="100" />
-        <KPICard label="Staff Members"   value={animStaff}   icon={Icons.staff}   color="#4f46e5" delay="200" />
-        <KPICard label="Pending Reviews" value={animPending} icon={Icons.pending} color="#d97706" delay="300" />
+      {/* ── KPI Grid ── */}
+      <div className="kpi-grid kpi-grid--3">
+        <KPICard label="Total Clients"    value={animClients} icon={Icons.clients}  color="#2563eb" delay="0" />
+        <KPICard label="Staff Members"    value={animStaff}   icon={Icons.staff}    color="#4f46e5" delay="100" />
+        <KPICard label="Branch Network"   value={5}           icon={Icons.branches} color="#d97706" delay="200" className="kpi-card--span" />
       </div>
 
-      {/* ── Donut Chart Widget ── */}
-      <div className="widget-card widget-donut">
+      {/* ── Branches List Widget ── */}
+      <div className="widget-card widget-branches">
         <div className="widget-header">
-          <span className="widget-header__title">Role Distribution</span>
-          <span className="widget-header__sub">Active Roles</span>
+          <span className="widget-header__title">Corporate Network</span>
+          <span className="widget-header__sub">Active Branches</span>
         </div>
-
-        <div className="donut-content">
-          <div className="donut-svg-wrapper">
-            <svg viewBox="0 0 100 100" width="100%" height="100%">
-              <circle cx="50" cy="50" r={donutRadius} fill="transparent"
-                stroke="rgba(255,255,255,0.03)" strokeWidth="10" />
-              {segments.map((seg, idx) => {
-                const strokeLength = (seg.weight / totalWeight) * circ
-                const strokeOffset = currentOffset
-                currentOffset -= strokeLength
-                const isHovered = activeSegment === idx
-                return (
-                  <circle key={seg.label}
-                    cx="50" cy="50" r={donutRadius}
-                    fill="transparent"
-                    stroke={seg.color}
-                    strokeWidth={isHovered ? 13 : 10}
-                    strokeDasharray={`${strokeLength} ${circ - strokeLength}`}
-                    strokeDashoffset={strokeOffset}
-                    strokeLinecap="round"
-                    className="donut-segment"
-                    style={{ transition: 'stroke-width 0.3s ease' }}
-                    onMouseEnter={() => setActiveSegment(idx)}
-                    onMouseLeave={() => setActiveSegment(null)}
-                  />
-                )
-              })}
-            </svg>
-            <div className="donut-center">
-              <span className="donut-center__val">
-                {activeSegment !== null
-                  ? segments[activeSegment].val.toLocaleString()
-                  : (totalClients + totalStaff + totalAgents).toLocaleString()}
-              </span>
-              <span className="donut-center__lbl">
-                {activeSegment !== null ? segments[activeSegment].label : 'Total'}
-              </span>
-            </div>
-          </div>
-
-          <div className="donut-legend">
-            {segments.map((seg, idx) => (
-              <div
-                key={seg.label}
-                className={`legend-item ${activeSegment === idx ? 'legend-item--active' : ''}`}
-                onMouseEnter={() => setActiveSegment(idx)}
-                onMouseLeave={() => setActiveSegment(null)}
-              >
-                <span className="legend-marker" style={{ background: seg.color }} />
-                <div className="legend-text">
-                  <span className="legend-label">{seg.label}</span>
-                  <span className="legend-value">{seg.val.toLocaleString()}</span>
-                </div>
+        <div className="branches-list">
+          {['Gombe State', 'Adamawa State', 'Plateau State', 'Taraba State', 'Kaduna State'].map((branch, idx) => (
+            <div key={branch} className={`branch-item animate-fade-in-up`} style={{ animationDelay: `${idx * 100}ms` }}>
+              <div className="branch-marker-wrap">
+                <span className="branch-marker-dot" />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="branch-map-icon">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
               </div>
-            ))}
-          </div>
+              <div className="branch-details">
+                <span className="branch-name">{branch}</span>
+                <span className="branch-status">Operational</span>
+              </div>
+              <div className="branch-badge">Live</div>
+            </div>
+          ))}
         </div>
       </div>
 
