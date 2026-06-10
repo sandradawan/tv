@@ -6,17 +6,14 @@ import TickerBar from './components/TickerBar.jsx'
 import './App.css'
 
 // ── Config ───────────────────────────────────────────────────────────────────
-const API_URL            = import.meta.env.VITE_API_URL || 'https://system.imperialvillapropertydevelopment.com/api/api-stats.php'
-const POLL_INTERVAL      = Number(import.meta.env.VITE_POLL_INTERVAL)  || 60_000
+const API_URL       = import.meta.env.VITE_API_URL || 'https://system.imperialvillapropertydevelopment.com/api/api-stats.php'
+const POLL_INTERVAL = Number(import.meta.env.VITE_POLL_INTERVAL) || 60_000
 
 export default function App() {
   const [stats,    setStats]    = useState(null)
   const [loading,  setLoading]  = useState(true)
   const [error,    setError]    = useState(null)
   const [lastSync, setLastSync] = useState(null)
-
-  // Track mediaMode to blur header/ticker when video plays
-  const [mediaMode, setMediaMode] = useState('video')
 
   // ── Stats polling ─────────────────────────────────────────────────────────
   const fetchStats = useCallback(async () => {
@@ -46,8 +43,8 @@ export default function App() {
   }, [fetchStats])
 
   return (
-    <div className={`dashboard-root ${mediaMode === 'video' ? 'dashboard-root--video-active' : ''}`}>
-      {/* Ambient background orbs */}
+    <div className="dashboard-root">
+      {/* Ambient background layers */}
       <div className="bg-orbs" aria-hidden="true">
         <span className="bg-orb bg-orb--1" />
         <span className="bg-orb bg-orb--2" />
@@ -55,13 +52,13 @@ export default function App() {
       </div>
       <div className="bg-grid" aria-hidden="true" />
 
-      {/* Header */}
+      {/* Header — always fully visible, no blur */}
       <Header lastSync={lastSync} />
 
-      {/* Main: Combined Media Showcase left, Stats right */}
+      {/* Main content */}
       <main className="dashboard-body">
         <section className="slideshow-section">
-          <MediaShowcase onModeChange={setMediaMode} />
+          <MediaShowcase />
         </section>
         <aside className="stats-section">
           <StatsPanel stats={stats} loading={loading} error={error} />

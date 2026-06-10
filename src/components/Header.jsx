@@ -19,7 +19,7 @@ export default function Header({ lastSync }) {
   const date = `${day}, ${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`
 
   const syncText = lastSync
-    ? `Updated ${lastSync.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+    ? `Synced ${lastSync.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
     : 'Connecting…'
 
   return (
@@ -38,7 +38,9 @@ export default function Header({ lastSync }) {
         </div>
       </div>
 
-      {/* ── Date ── */}
+      <div className="header-divider" aria-hidden="true" />
+
+      {/* ── Date & Sync ── */}
       <div className="header-date">
         <span className="date-string">{date}</span>
         <span className="sync-badge">
@@ -46,6 +48,8 @@ export default function Header({ lastSync }) {
           <span className="sync-label">{syncText}</span>
         </span>
       </div>
+
+      <div className="header-divider" aria-hidden="true" />
 
       {/* ── Clock ── */}
       <div className="header-clock" aria-label={`Time: ${hh}:${mm}:${ss}`}>

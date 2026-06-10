@@ -1,17 +1,18 @@
-/* ── Header.css  (Dark Theme) ──────────────────────────── */
+/* ── Header.css — Corporate Dark Theme ─────────────────── */
 
+/* ── Brand (left) ───────────────────────────────────────── */
 .header-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 .logo-img {
-  width: 3.8rem;
-  height: 3.8rem;
+  width: 3.2rem;
+  height: 3.2rem;
   border-radius: 50%;
   object-fit: contain;
-  filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.55));
+  filter: drop-shadow(0 0 10px rgba(201, 162, 39, 0.5));
   flex-shrink: 0;
 }
 
@@ -22,93 +23,111 @@
 }
 
 .brand-name {
-  font-family: var(--font-clock);
-  font-size: 1.3rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
+  font-family: var(--font-brand);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   line-height: 1;
-  background: linear-gradient(90deg, #d4af37, #f5d97a, #d4af37);
+  background: linear-gradient(90deg, #e5c54a 0%, #c9a227 40%, #f0d878 70%, #c9a227 100%);
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-transform: uppercase;
+  animation: goldShimmer 5s linear infinite;
+}
+
+@keyframes goldShimmer {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .brand-tagline {
-  font-size: 0.62rem;
-  font-weight: 500;
+  font-family: var(--font-brand);
+  font-size: 0.58rem;
+  font-weight: 400;
   color: var(--text-muted);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
-/* ── Centre ─────────────────────────────────────────────── */
+/* ── Dividers between header zones ─────────────────────── */
+.header-divider {
+  width: 1px;
+  height: 2rem;
+  background: rgba(255, 255, 255, 0.07);
+  flex-shrink: 0;
+}
+
+/* ── Centre — date & sync ───────────────────────────────── */
 .header-date {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .date-string {
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: var(--font-brand);
+  font-size: 0.88rem;
+  font-weight: 500;
   color: var(--text-secondary);
+  letter-spacing: 0.04em;
 }
 
 .sync-badge {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.2rem 0.75rem;
+  padding: 0.18rem 0.65rem;
   border-radius: 999px;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(5, 150, 105, 0.08);
+  border: 1px solid rgba(5, 150, 105, 0.22);
 }
 
 .sync-dot {
-  width: 0.42rem;
-  height: 0.42rem;
+  width: 0.38rem;
+  height: 0.38rem;
   border-radius: 50%;
   background: var(--accent-emerald);
-  animation: pulse-dot 2s ease-in-out infinite;
+  animation: pulse-dot 2.5s ease-in-out infinite;
 }
 
 .sync-label {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 700;
   color: var(--accent-emerald);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-/* ── Clock ──────────────────────────────────────────────── */
+/* ── Clock (right) ──────────────────────────────────────── */
 .header-clock {
   display: flex;
   align-items: baseline;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .clock-hhmm {
   font-family: var(--font-clock);
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .clock-colon {
   animation: pulse-dot 1s step-start infinite;
   display: inline-block;
-  color: #d4af37;
+  color: var(--gold);
 }
 
 .clock-ss {
   font-family: var(--font-clock);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 400;
   color: var(--text-muted);
   letter-spacing: 0.06em;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
