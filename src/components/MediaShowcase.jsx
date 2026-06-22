@@ -5,26 +5,35 @@ import './MediaShowcase.css'
 const VIDEOS = [
   { src: '/assets/video.mp4',  label: 'Imperialvilla Showcase' },
   { src: '/assets/video2.mp4', label: 'Imperialvilla Highlights' },
+  { src: '/assets/video3.mp4', label: 'Imperialvilla Presentation' },
 ]
 
 const IMAGES = [
-  // Branded flyers
-  { src: '/assets/flyer4.png',  caption: 'Welcome to Imperialvilla',        sub: 'Excellence in Every Build' },
-  { src: '/assets/flyer1.png',  caption: 'Find Your Dream Home',             sub: 'Premium Properties Across Nigeria' },
-  { src: '/assets/flyer2.png',  caption: 'Invest in Real Estate Today',      sub: 'Secure Your Future With Smart Investments' },
-  { src: '/assets/flyer3.png',  caption: 'Our Services',                     sub: 'Sales · Management · Acquisition · Leasing' },
   // Photo gallery
-  { src: '/assets/gombe.jpeg',  caption: 'Gombe State',                      sub: 'Imperialvilla Developments' },
-  { src: '/assets/staff.jpeg',  caption: 'Our Team',                         sub: 'Dedicated Professionals Serving You' },
-  { src: '/assets/staff2.jpeg', caption: 'Meet the Team',                    sub: 'Building Relationships, Creating Value' },
-  { src: '/assets/staff3.jpeg', caption: 'Imperialvilla Staff',              sub: 'Excellence in Every Interaction' },
-  { src: '/assets/staff4.jpeg', caption: 'Our People',                       sub: 'The Heart of Imperialvilla' },
-  { src: '/assets/staff5.jpeg', caption: 'Professional Team',                sub: 'Your Success is Our Priority' },
-  { src: '/assets/staff6.jpeg', caption: 'Imperialvilla Professionals',      sub: 'Committed to Your Real Estate Journey' },
-  { src: '/assets/staff7.jpeg', caption: 'Award-Winning Service',            sub: 'Industry Leaders Since 2015' },
-  { src: '/assets/staff8.jpeg', caption: 'Expert Advisors',                  sub: 'Trusted Guidance for Every Decision' },
-  { src: '/assets/staff9.jpeg', caption: 'Join Our Growing Family',          sub: 'Premier Real Estate in Nigeria' },
+  { src: '/assets/gombe.jpeg',                  caption: 'Gombe State',                      sub: 'Imperialvilla Developments' },
+  { src: '/assets/staff.jpeg',                  caption: 'Our Team',                         sub: 'Dedicated Professionals Serving You' },
+  { src: '/assets/staff6.jpeg',                 caption: 'Imperialvilla Professionals',      sub: 'Committed to Your Real Estate Journey' },
+  { src: '/assets/staff7.jpeg',                 caption: 'Award-Winning Service',            sub: 'Industry Leaders Since 2015' },
+  { src: '/assets/jalingo.jpeg',                 caption: 'Jalingo Development',              sub: 'Exquisite Residential Projects in Taraba' },
+  { src: '/assets/hmm.png',                     caption: 'Modern Architectural Design',      sub: 'Innovative Conceptions for Luxury Villas' },
+  { src: '/assets/IMG-20260618-WA0188.jpg',     caption: 'Structural Foundation',            sub: 'Precision Engineering & Solid Foundations' },
+  { src: '/assets/IMG-20260618-WA0190.jpg',     caption: 'Blockwork Progress',               sub: 'Building Strong and Durable Structures' },
+  { src: '/assets/IMG-20260620-WA0001.jpg',     caption: 'Site Inspection',                  sub: 'Strict Quality Control & Supervision' },
+  { src: '/assets/IMG-20260622-WA0018.jpg',     caption: 'Premium Finishing',                sub: 'Meticulous Attention to Every Detail' },
+  { src: '/assets/IMG-20260622-WA0019.jpg',     caption: 'Interior Architecture',            sub: 'Spacious & Thoughtfully Crafted Layouts' },
+  { src: '/assets/IMG-20260622-WA0055.jpg',     caption: 'Modern Exterior View',             sub: 'Elegant Aesthetics & Contemporary Style' },
+  { src: '/assets/IMG-20260622-WA0057.jpg',     caption: 'Development Landmark',             sub: 'Creating Iconic Spaces in Prime Locations' },
+  { src: '/assets/IMG-20260622-WA0062.jpg',     caption: 'Construction Milestone',           sub: 'Delivering Projects on Schedule' },
+  { src: '/assets/IMG-20260622-WA0063.jpg',     caption: 'Facade Details',                   sub: 'Sophisticated Designs & Premium Materials' },
+  { src: '/assets/IMG-20260622-WA0064.jpg',     caption: 'Luxury Living Spaces',             sub: 'Designed for Comfort and Sophistication' },
+  { src: '/assets/IMG-20260622-WA0066(2).jpg',  caption: 'Residential Walkways',             sub: 'Paved Pathways & Beautiful Landscaping' },
+  { src: '/assets/IMG-20260622-WA0068.jpg',     caption: 'Scenic Overview',                  sub: 'Master-Planned Communities by Imperialvilla' },
+  { src: '/assets/IMG-20260622-WA0069.jpg',     caption: 'Villa Entrance',                   sub: 'Welcoming Grandeur & Refined Entryways' },
+  { src: '/assets/IMG-20260622-WA0073.jpg',     caption: 'Roofing Phase',                    sub: 'Durable Roofing Solutions for Long-Lasting Protection' },
+  { src: '/assets/IMG-20260622-WA0074.jpg',     caption: 'Site Team Coordination',           sub: 'Collaborative Effort to Ensure Excellence' },
+  { src: '/assets/IMG-20260622-WA0075.jpg',     caption: 'Sunset Site View',                 sub: 'Dedicated to Shaping Tomorrow\'s Skyline' },
 ]
+
 
 const IMAGE_SESSION_DUR = Number(import.meta.env.VITE_IMAGE_SESSION_DUR) || 600000
 const SINGLE_IMAGE_DUR  = Number(import.meta.env.VITE_SINGLE_IMAGE_DUR)  || 8000

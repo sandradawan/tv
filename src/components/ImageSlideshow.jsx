@@ -5,26 +5,47 @@ import './ImageSlideshow.css'
 // Add your own real flyer images to /public/assets/ and list them here.
 const SLIDES = [
   {
-    src:     '/assets/flyer4.png',
-    caption: 'Welcome to Imperialvilla',
-    sub:     'Excellence in Every Build',
+    src:     '/assets/gombe.jpeg',
+    caption: 'Gombe State',
+    sub:     'Imperialvilla Developments',
   },
   {
-    src:     '/assets/flyer1.png',
-    caption: 'Find Your Dream Home',
-    sub:     'Premium Properties Across Nigeria',
+    src:     '/assets/jalingo.jpeg',
+    caption: 'Jalingo Development',
+    sub:     'Exquisite Residential Projects in Taraba',
   },
   {
-    src:     '/assets/flyer2.png',
-    caption: 'Invest in Real Estate Today',
-    sub:     'Secure Your Future With Smart Property Investments',
+    src:     '/assets/hmm.png',
+    caption: 'Modern Architectural Design',
+    sub:     'Innovative Conceptions for Luxury Villas',
   },
   {
-    src:     '/assets/flyer3.png',
-    caption: 'Our Services',
-    sub:     'Sales · Management · Acquisition · Leasing',
+    src:     '/assets/IMG-20260622-WA0055.jpg',
+    caption: 'Modern Exterior View',
+    sub:     'Elegant Aesthetics & Contemporary Style',
+  },
+  {
+    src:     '/assets/IMG-20260622-WA0064.jpg',
+    caption: 'Luxury Living Spaces',
+    sub:     'Designed for Comfort and Sophistication',
+  },
+  {
+    src:     '/assets/IMG-20260622-WA0068.jpg',
+    caption: 'Scenic Overview',
+    sub:     'Master-Planned Communities by Imperialvilla',
+  },
+  {
+    src:     '/assets/IMG-20260622-WA0069.jpg',
+    caption: 'Villa Entrance',
+    sub:     'Welcoming Grandeur & Refined Entryways',
+  },
+  {
+    src:     '/assets/IMG-20260622-WA0075.jpg',
+    caption: 'Sunset Site View',
+    sub:     'Dedicated to Shaping Tomorrow\'s Skyline',
   },
 ]
+
 
 const SLIDE_DURATION = 7000  // ms each slide is visible
 const TRANSITION_MS  = 800   // CSS crossfade duration
