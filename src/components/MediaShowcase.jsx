@@ -32,6 +32,8 @@ const IMAGES = [
   { src: '/assets/IMG-20260622-WA0073.jpg',     caption: 'Roofing Phase',                    sub: 'Durable Roofing Solutions for Long-Lasting Protection' },
   { src: '/assets/IMG-20260622-WA0074.jpg',     caption: 'Site Team Coordination',           sub: 'Collaborative Effort to Ensure Excellence' },
   { src: '/assets/IMG-20260622-WA0075.jpg',     caption: 'Sunset Site View',                 sub: 'Dedicated to Shaping Tomorrow\'s Skyline' },
+  { src: '/assets/birthday1.jpg',                caption: 'Happy Birthday!',                  sub: 'Celebrating Special Milestones' },
+  { src: '/assets/birthday2.jpg',                caption: 'Happy Birthday!',                  sub: 'Wishing You Joy, Success, and Happiness' },
 ]
 
 
@@ -95,6 +97,12 @@ export default function MediaShowcase() {
   // Track whether bg music should currently be playing
   const bgShouldPlay  = useRef(false)
 
+  // Derived state/references
+  const currentVideo = shuffledVideos[videoIndex]
+  const currentImage = shuffledImages[imageIndex]
+  const isBirthday = currentImage && (currentImage.src.includes('birthday1') || currentImage.src.includes('birthday2'))
+  const expectedAudioSrc = isBirthday ? '/assets/birthday.mp3' : '/assets/background.mp3'
+
   // ── Audio fade helper ────────────────────────────────────
   const fadeAudio = useCallback((el, target, ms = 800) => {
     if (!el) return
@@ -112,27 +120,6 @@ export default function MediaShowcase() {
       }
     }, ms / steps)
   }, [])
-
-  // ── Start background music ───────────────────────────────
-  // Always start playing (muted or unmuted — browser allows muted autoplay).
-  // Volume will be set to 0 if muted, 0.5 if unmuted.
-  const startBgMusic = useCallback(() => {
-    const bg = bgAudioRef.current
-    if (!bg) return
-    bgShouldPlay.current = true
-    bg.muted  = false
-    bg.volume = 0
-    bg.play()
-      .then(() => {
-        // Only fade to audible volume if user has unmuted
-        if (!isMutedRef.current) {
-          fadeAudio(bg, 0.5, 1800)
-        }
-      })
-      .catch(() => {
-        // Autoplay blocked — stays silent until user interaction
-      })
-  }, [fadeAudio])
 
   // ── Stop background music ────────────────────────────────
   const stopBgMusic = useCallback(() => {
@@ -176,35 +163,72 @@ export default function MediaShowcase() {
     })
   }, [shuffledVideos.length])
 
-  // ── Effect: mode changed → manage audio + timers ─────────
+  // ── Effect: manage session duration ───────────────────────
   useEffect(() => {
     if (mode === 'video') {
-      // Stop background music immediately
-      stopBgMusic()
       clearTimeout(sessionTimer.current)
-      clearInterval(flyerTimer.current)
     } else {
-      // Start background music for image slideshow
-      startBgMusic()
-
       // After session timeout, cycle back to next video
       sessionTimer.current = setTimeout(goToNextVideo, IMAGE_SESSION_DUR)
-
-      // Rotate flyers
-      flyerTimer.current = setInterval(() => {
-        setImageIndex(prev => {
-          const next = prev + 1
-          if (next >= shuffledImages.length) { setShuffledImages(shuffle(IMAGES)); return 0 }
-          return next
-        })
-      }, SINGLE_IMAGE_DUR)
     }
 
     return () => {
       clearTimeout(sessionTimer.current)
-      clearInterval(flyerTimer.current)
     }
-  }, [mode, shuffledImages.length, shuffledVideos.length, startBgMusic, stopBgMusic, goToNextVideo])
+  }, [mode, goToNextVideo])
+
+  // ── Effect: rotate flyers with dynamic duration ─────────
+  useEffect(() => {
+    if (mode !== 'image') return
+
+    const duration = isBirthday ? 60000 : SINGLE_IMAGE_DUR
+
+    flyerTimer.current = setTimeout(() => {
+      setImageIndex(prev => {
+        const next = prev + 1
+        if (next >= shuffledImages.length) {
+          setShuffledImages(shuffle(IMAGES))
+          return 0
+        }
+        return next
+      })
+    }, duration)
+
+    return () => {
+      clearTimeout(flyerTimer.current)
+    }
+  }, [mode, imageIndex, shuffledImages, isBirthday])
+
+  // ── Effect: manage background music source & playback ───
+  useEffect(() => {
+    const bg = bgAudioRef.current
+    if (!bg) return
+
+    if (mode === 'image') {
+      const currentSrc = bg.getAttribute('src')
+      if (!currentSrc || !currentSrc.endsWith(expectedAudioSrc)) {
+        bg.src = expectedAudioSrc
+        bg.load()
+      }
+
+      bgShouldPlay.current = true
+      bg.muted = false
+
+      bg.play()
+        .then(() => {
+          if (!isMutedRef.current) {
+            fadeAudio(bg, 0.5, 1200)
+          } else {
+            bg.volume = 0
+          }
+        })
+        .catch((err) => {
+          console.log('Audio playback failed or blocked:', err)
+        })
+    } else {
+      stopBgMusic()
+    }
+  }, [mode, expectedAudioSrc, stopBgMusic, fadeAudio])
 
   // ── Effect: play video whenever index or mode changes ────
   useEffect(() => {
@@ -264,16 +288,12 @@ export default function MediaShowcase() {
     }
   }, [])
 
-  // ── Render ───────────────────────────────────────────────
-  const currentVideo = shuffledVideos[videoIndex]
-  const currentImage = shuffledImages[imageIndex]
-
   return (
     <div className="showcase-root">
       {/* Background ambient music — plays only during flyer mode */}
       <audio
         ref={bgAudioRef}
-        src="/assets/background.mp3"
+        src={expectedAudioSrc}
         loop
         preload="auto"
       />
@@ -398,10 +418,10 @@ export default function MediaShowcase() {
           </div>
 
           {/* Progress bar */}
-          <div className="showcase-progress">
+          <div className="showcase-progress" key={`prog-${imageIndex}`}>
             <div
               className="showcase-progress__bar"
-              style={{ animationDuration: `${SINGLE_IMAGE_DUR}ms` }}
+              style={{ animationDuration: `${isBirthday ? 60000 : SINGLE_IMAGE_DUR}ms` }}
             />
           </div>
         </div>
