@@ -17,4 +17,5 @@ dist/
 .DS_Store
 
 # Large media assets — video.mp4 included (45MB, under GitHub 100MB limit)
-# If video grows beyond 100MB in future, use Git LFS instead.
+# video4.MP4 is 138MB and exceeds GitHub's 100MB limit — use Git LFS if needed.
+public/assets/video4.MP4

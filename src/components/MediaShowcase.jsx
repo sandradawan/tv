@@ -14,26 +14,21 @@ const IMAGES = [
   { src: '/assets/staff.jpeg',                  caption: 'Our Team',                         sub: 'Dedicated Professionals Serving You' },
   { src: '/assets/staff6.jpeg',                 caption: 'Imperialvilla Professionals',      sub: 'Committed to Your Real Estate Journey' },
   { src: '/assets/staff7.jpeg',                 caption: 'Award-Winning Service',            sub: 'Industry Leaders Since 2015' },
-  { src: '/assets/jalingo.jpeg',                 caption: 'Jalingo Development',              sub: 'Exquisite Residential Projects in Taraba' },
   { src: '/assets/hmm.png',                     caption: 'Modern Architectural Design',      sub: 'Innovative Conceptions for Luxury Villas' },
   { src: '/assets/IMG-20260618-WA0188.jpg',     caption: 'Structural Foundation',            sub: 'Precision Engineering & Solid Foundations' },
   { src: '/assets/IMG-20260618-WA0190.jpg',     caption: 'Blockwork Progress',               sub: 'Building Strong and Durable Structures' },
-  { src: '/assets/IMG-20260620-WA0001.jpg',     caption: 'Site Inspection',                  sub: 'Strict Quality Control & Supervision' },
-  { src: '/assets/IMG-20260622-WA0018.jpg',     caption: 'Premium Finishing',                sub: 'Meticulous Attention to Every Detail' },
   { src: '/assets/IMG-20260622-WA0019.jpg',     caption: 'Interior Architecture',            sub: 'Spacious & Thoughtfully Crafted Layouts' },
   { src: '/assets/IMG-20260622-WA0055.jpg',     caption: 'Modern Exterior View',             sub: 'Elegant Aesthetics & Contemporary Style' },
-  { src: '/assets/IMG-20260622-WA0057.jpg',     caption: 'Development Landmark',             sub: 'Creating Iconic Spaces in Prime Locations' },
   { src: '/assets/IMG-20260622-WA0062.jpg',     caption: 'Construction Milestone',           sub: 'Delivering Projects on Schedule' },
-  { src: '/assets/IMG-20260622-WA0063.jpg',     caption: 'Facade Details',                   sub: 'Sophisticated Designs & Premium Materials' },
   { src: '/assets/IMG-20260622-WA0064.jpg',     caption: 'Luxury Living Spaces',             sub: 'Designed for Comfort and Sophistication' },
-  { src: '/assets/IMG-20260622-WA0066(2).jpg',  caption: 'Residential Walkways',             sub: 'Paved Pathways & Beautiful Landscaping' },
-  { src: '/assets/IMG-20260622-WA0068.jpg',     caption: 'Scenic Overview',                  sub: 'Master-Planned Communities by Imperialvilla' },
-  { src: '/assets/IMG-20260622-WA0069.jpg',     caption: 'Villa Entrance',                   sub: 'Welcoming Grandeur & Refined Entryways' },
-  { src: '/assets/IMG-20260622-WA0073.jpg',     caption: 'Roofing Phase',                    sub: 'Durable Roofing Solutions for Long-Lasting Protection' },
   { src: '/assets/IMG-20260622-WA0074.jpg',     caption: 'Site Team Coordination',           sub: 'Collaborative Effort to Ensure Excellence' },
   { src: '/assets/IMG-20260622-WA0075.jpg',     caption: 'Sunset Site View',                 sub: 'Dedicated to Shaping Tomorrow\'s Skyline' },
-  { src: '/assets/birthday1.jpg',                caption: 'Happy Birthday!',                  sub: 'Celebrating Special Milestones' },
-  { src: '/assets/birthday2.jpg',                caption: 'Happy Birthday!',                  sub: 'Wishing You Joy, Success, and Happiness' },
+  { src: '/assets/birthday1.jpeg',               caption: 'Happy Birthday!',                  sub: 'Celebrating Special Milestones' },
+  { src: '/assets/birthday2.jpeg',               caption: 'Happy Birthday!',                  sub: 'Wishing You Joy, Success, and Happiness' },
+  { src: '/assets/birthday3.jpeg',               caption: 'Happy Birthday!',                  sub: 'Wishing You Joy, Success, and Happiness' },
+  { src: '/assets/birthday4.jpeg',               caption: 'Happy Birthday!',                  sub: 'Wishing You Joy, Success, and Happiness' },
+  { src: '/assets/birthday5.jpeg',               caption: 'Happy Birthday!',                  sub: 'Wishing You Joy, Success, and Happiness' },
+  { src: '/assets/birthday6.jpeg',               caption: 'Happy Birthday!',                  sub: 'Wishing You Joy, Success, and Happiness' },
 ]
 
 
@@ -100,7 +95,7 @@ export default function MediaShowcase() {
   // Derived state/references
   const currentVideo = shuffledVideos[videoIndex]
   const currentImage = shuffledImages[imageIndex]
-  const isBirthday = currentImage && (currentImage.src.includes('birthday1') || currentImage.src.includes('birthday2'))
+  const isBirthday = currentImage && currentImage.src.includes('birthday')
   const expectedAudioSrc = isBirthday ? '/assets/birthday.mp3' : '/assets/background.mp3'
 
   // ── Audio fade helper ────────────────────────────────────
